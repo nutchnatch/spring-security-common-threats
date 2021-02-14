@@ -1,0 +1,23 @@
+What security ptotocols do you know?
+
+Basic and form authenticaton
+Oauth2 and OpenID connect
+LDAP - Lightweight Directory Access Protocol
+JWT - Jason Web Token
+
+
+What do you think authentication differs from authorization?
+
+What are the modules of Spring Security?
+
+How spring security manages all requests, in order to guarantee the security?
+
+How do you manage routing of thr requests, in terms of security checks? What if I want to add different filters for different routes?
+
+How would you integrate a specific Authentication Provider in the app?
+
+What can I do create another filter chain with new rules?
+
+Which kind of threats do you think an application is exposed to?
+
+How can you describe and protect against Cross Site Request Forgery (CSRF)?

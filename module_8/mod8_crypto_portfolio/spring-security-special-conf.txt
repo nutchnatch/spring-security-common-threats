@@ -1,0 +1,37 @@
+Configuring Spring Security with Adapter:
+		- if we want to add our own authentication
+			* first, extends class WebSecurityConfigurerAdapter
+			* add matchers for "/login".permitAll
+			* implements configure(WebSecurity)
+				- ignore mvc marcher for: "/css/**", "/webjars/**"
+
+			- this will creare a new filterchain
+			- filter proxy will iterate through each filter chain to see which one fits the request
+
+	AuthenticationManager:
+		- to add a new authentication manager
+			+ when extending WebSecurityConfigurerAdapter
+				- implements configure(AuthenticationManagerBuilder builder)
+					add {noop} to enconde the password, using an encryp+ting algorithm (PasswordEncoderFactories.class)
+
+	Send notification to user by mail:
+		- create a class which implements AuthenticationSuccessHandler interface
+		- implement onAuthenticationSuccess(HttpServletRequest request, response)
+
+	Common Security Threats protection
+		- watching responses that come back from the webserver,
+			+ we see a number of headers, which spring security included by default
+			+ this instruct the borwser to communicate more securely with the application
+				- they are added by the header filter
+				- which can be altered adding http.headers() when implementing configure(HttpSecurity http)
+				- e cab disable it if preferred: http.hreaders().disabled()
+
+	Cach Control Header
+		- tels browser to disable all caches
+			+ cache-control: no-cache, no-store, must-revalidate, expires=0
+		- even after user logs out, history and cached data are available
+			+ identity data keeps in the browser
+				- used for adentoty thief, fishing attacs
+				- get password
+		- to disable it -> headers().cacheControl().disable()
+		- it can be desabled for each area (eg: /prices)

@@ -1,0 +1,57 @@
+Reflected Cross-Site Scripting (XSS) - occurs when an attacker injects brewser executable code within a single HTTP response
+		- usualy, it is alreadu supported by the browser
+		- in instruct the browser tha in tre presence of this attack, the response should be block
+		- anyway somebrowser have other way to deal with it, which can lead to following header:
+			+ X-Content-Type-Options: nosiff
+				- prevents the client from trying to determine what the file type is, other than what is declared by the application
+				- this is known as content sniffing, or media type sniffing or MIME sniffing - is the practive of inspecting the content of a byte stream  to atempt to deduce the file format of data within it - to improve user experience
+				 -> malitious parties exploited it using poliglot - computer program or script written in a valid form of multiple programming languages
+				 	- this expects the browser to execute the script
+				 	- this is called a Cross-site-scripting attack
+				 	- X-Content-Type-Options: nosiff tells browser to disable cross-site attack
+
+	Cross Site Request Forgery (CSRF)
+		- is an attack that forces the end user to execute unwanted actions on a web application in which they are currently authenticated
+		1- user logs in
+		2- browser sends request and recieves a coockie to be used in further requests
+		3- if user access a malitious site in another tab an submit something
+		4- the melicious site can submit something to the target domain (our server), and browser will ass the cookie for that request
+
+		- this attack is only available for state changing operations like POST, PUT, DELETE, PATCH
+		- as the response is returned, melicious site can submit a change od content deleting content, trnasfering funds, or reset the password
+		- spring protect against this attack using Synchronizer Token Pattern
+			+ 1 user logs in
+			+ 2 server returns the response with cookie and a random crsf token
+			+ 3 brwoser stores the cookie, but has no knolwdge of the token
+			+ 4 spring expects cookie and token to be included in all requests
+			+ 5 melicious site has no access to the token
+			+ 6 when it submits request to the domain, spring security will reject it
+
+			- in spring security, this is added on a filter (Csrf filter)
+
+		- to activate csrf in spring security
+			+ on configure(HttpSecurity http)
+			+ define csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+				 - withHttpOnlyFalse, because we need to extract the token from this cookie, and so it needs permission to do so, to read the cookie, since the browser blocks any js to access cookies in order to protect against csrf. The browser will allow javascript originating from the same origin to access the cookie
+
+	Clickjack Protection:
+		- X-Frame-Options: DENY
+		- instruct the browser not to embebed the app in frames, to protect agains click jacking
+		- the user is tricked  to click in clicking something in your website without being aware of that - this is a popular attack in social media
+		- happens when user trucked into liking posts and pages in a social media platform, giving the melicious site access to their friendlist - this happens overlaying a melicious site over the target
+		- if the user is logged into the target site, melisious site can load target site in background, and any actions in the melitious site is actualy taking place in to the target site
+		- the hack can send another email appologising to the user about technical issues and asking them to try a new link
+			+ the page looks similar, but take a look into the source
+			+ it might embed the target site in a frame on top of the target page
+			+ hacker align buttons with the target side
+			+ the csrf token is already in the form, so the hacker can use the form
+			+ if the user click the button, it will be under a click jacking attack
+
+		- this protection can be desabled or less restricted:
+			+ headers().frameOptions().sameOrigin()
+				- only pages for the same domain can include this site in the frame
+
+	Content Security Policy
+		- another header which allows the app to notifies the user browser about resources of resources, such as js, css,
+		- headers().contentSecurityPolicy("script-src: http://mydomain") - allows it to be executed only through a specific domain
+			+ pay attention to the configuration details

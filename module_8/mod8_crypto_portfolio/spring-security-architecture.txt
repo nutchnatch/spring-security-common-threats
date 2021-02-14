@@ -1,0 +1,38 @@
+SpringSecurity Architecture
+		- WebServer contains:
+			+ Servlet Container
+				* contains the servlet (proccess incoming request)
+				* spring sedurity add DispatcherServlet
+					- which intercepts all requests for MVC application
+				* beyond servlet, there are Filters
+					+ Filters sit in front of servlet and intercept all request
+					+ important if we want to do some operations before handling the requests before the servlet
+						- Filter chains
+							+ DelegatingFilterProxy - intercepts all requests before they reach dispatcher servlet
+								* delegates to FilterChainProxy - manages the routing of the requests to Filter Chains
+									- Filter Chains - collections os filters which perform security checks
+										* different requests can be handled by different filter chains
+										* usualy, we have only one filter chain, but we can configure more than one for different parts of the app
+											ex: /portfolio -> one filter chain
+												/admin -> other filter chain
+						Authentication Filters:
+							- UsernamePasswordAuthenticationFilter
+							- DigestAuthenticationFIlter
+							- BasicAuthenticationFilter
+							- Oauth2LoginAuthenticationFilter
+
+							+ it intercepts a request with one of the above filter
+							+ with user credentials, creates authentition object (UsernamePasswordAuthenticationToken, OpenIDAuthenticationToken)
+							+ call AuthenticationManager to authenticate
+								- delegates authentication to Proper Authentication Provider
+									+ Oauth2LoginAuthenticationProvider
+									+ DAOLoginAuthenticationFilter
+									+ LdapLoginAuthenticationFilter
+
+									- if authentication succeeds, the provider returns:
+										+ Authenticated Principle
+									- Authentiction Filter stores the principles in an object called
+										+ SecurityContextHolder
+										- it can be retrieved by other filters, lower down in the filter chain
+										- authentication details can be got from all the application
+										- in a web application, this will be store in a session

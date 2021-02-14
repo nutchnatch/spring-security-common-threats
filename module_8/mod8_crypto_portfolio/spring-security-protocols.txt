@@ -1,0 +1,55 @@
+Spring Security Protocols:
+	- Basic and form authenticaton
+	- Oauth2 and OpenID connect
+	- LDAP - Lightweight Directory Access Protocol
+	- JWT - Jason Web Token
+
+	Out of the box protection against:
+		- Session Fixation
+		- Clickjacking
+		- Cross Site Request Forgery (CSRF)
+		- Cross site scripting (XSS)
+		- Cross site tracing
+		- URL and Httpverb tampering
+
+		* check OWASP top 10
+
+	Secures:
+		- Browser
+		- Server-side
+		- Methods and Domain Objects
+
+	Authetnication:
+		- Authentication.java
+		- Basic and Form Authentication
+		- Digest Authentication
+		- X.509 certificates
+
+		Browser -------> 	site.com
+			|					|
+			|				    |
+			-Send Cookie <--- Create a Session
+							    |
+						   Sava session
+
+			- that cookie is sent later on the requests to server
+			- user will not be required do authenticate again for the duration of the session
+
+		- Authenticated Principal represent the user in the application
+
+	Authorization:
+		- After authenticating, the user is assigned with some capabilities (what can access and what resources may access)
+
+	Spring security modules (projects)
+		- spring-security-core
+		- spring-security-config
+		- spring-security-test
+		- spring-security-web
+		- spring-security-oauth
+		- spring-security-ldap
+
+	Spring Security SpringBoot:
+		- SecurityAutoConfiguration.java --> contains the default configuraton
+		- UserDetailsServiceAutoConfiguration.java
+			* create a repository for user/pass
+			* if we give another authenication process, spring boot backs off
